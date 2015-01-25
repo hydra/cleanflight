@@ -43,6 +43,7 @@
 #include "rx/sumh.h"
 #include "rx/msp.h"
 #include "rx/xbus.h"
+#include "rx/exbus.h"
 
 #include "rx/rx.h"
 
@@ -54,6 +55,7 @@ bool sbusInit(rxConfig_t *initialRxConfig, rxRuntimeConfig_t *rxRuntimeConfig, r
 bool spektrumInit(rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig, rcReadRawDataPtr *callback);
 bool sumdInit(rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig, rcReadRawDataPtr *callback);
 bool sumhInit(rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig, rcReadRawDataPtr *callback);
+bool exbusInit(rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig, rcReadRawDataPtr *callback);
 
 bool rxMspInit(rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig, rcReadRawDataPtr *callback);
 
@@ -103,6 +105,9 @@ void updateSerialRxFunctionConstraint(functionConstraint_t *functionConstraintTo
             break;
         case SERIALRX_XBUS_MODE_B:
             xBusUpdateSerialRxFunctionConstraint(functionConstraintToUpdate);
+            break;
+        case SERIALRX_EXBUS:
+            exbusUpdateSerialRxFunctionConstraint(functionConstraintToUpdate);
             break;
     }
 }
@@ -160,6 +165,9 @@ void serialRxInit(rxConfig_t *rxConfig)
         case SERIALRX_XBUS_MODE_B:
             enabled = xBusInit(rxConfig, &rxRuntimeConfig, &rcReadRawFunc);
             break;
+        case SERIALRX_EXBUS:
+            enabled = exbusInit(rxConfig, &rxRuntimeConfig, &rcReadRawFunc);
+            break;
     }
 
     if (!enabled) {
@@ -183,6 +191,8 @@ bool isSerialRxFrameComplete(rxConfig_t *rxConfig)
             return sumhFrameComplete();
         case SERIALRX_XBUS_MODE_B:
             return xBusFrameComplete();
+        case SERIALRX_EXBUS:
+            return exbusFrameComplete();
     }
     return false;
 }
