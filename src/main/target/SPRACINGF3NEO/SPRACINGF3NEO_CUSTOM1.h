@@ -7,6 +7,8 @@
 
 #undef USE_SERVOS
 
+#define USE_DYN_LPF
+#define USE_D_MIN
 #define USE_RC_SMOOTHING_FILTER
 
 #include "target.h"
